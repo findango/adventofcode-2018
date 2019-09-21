@@ -1,0 +1,21 @@
+{
+    "name": "adventofcode-2018",
+    "version": "1.0.0",
+    "description": "Advent of Code 2018",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "author": "Finlay Cannon",
+    "license": "MIT",
+    "dependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+        "jest": "^24.9.0",
+        "ramda": "^0.26.1"
+    },
+    "babel": {
+        "plugins": [
+            "@babel/plugin-transform-modules-commonjs"
+        ]
+    }
+}
