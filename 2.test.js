@@ -31,12 +31,12 @@ const toLetters = R.splitEvery(1);
 
 const diff = (a, b) =>
     R.pipe(
-        R.unapply(R.map(toLetters)),
+        R.map(toLetters),
         R.apply(R.zip),
         R.filter(RA.allEqual),
         R.map(R.head),
         R.join('')
-    )(a, b);
+    )([a, b]);
 
 const findPair = ids => {
     // for each element
