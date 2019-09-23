@@ -11,7 +11,8 @@
     "dependencies": {
         "@babel/plugin-transform-modules-commonjs": "^7.6.0",
         "jest": "^24.9.0",
-        "ramda": "^0.26.1"
+        "ramda": "^0.26.1",
+        "ramda-adjunct": "^2.20.0"
     },
     "babel": {
         "plugins": [

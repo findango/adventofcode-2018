@@ -1,6 +1,7 @@
 // https://adventofcode.com/2018/day/2
 
 import * as R from 'ramda';
+import * as RA from 'ramda-adjunct';
 import input from './inputs/2.input';
 
 const countByValue = R.countBy(R.identity);
@@ -26,8 +27,32 @@ const checksum = ids =>
         counts => counts[2] * counts[3]
     )(ids);
 
+const toLetters = R.splitEvery(1);
+
+const diff = (a, b) =>
+    R.pipe(
+        R.unapply(R.map(toLetters)),
+        R.apply(R.zip),
+        R.filter(RA.allEqual),
+        R.map(R.head),
+        R.join('')
+    )(a, b);
+
+const findPair = ids => {
+    // for each element
+    // compare with each subsequent element (tail)
+    // compute the delta
+    // if the delta is one character: return as the result
+    for (let i = 0; i < ids.length; i++) {
+        for (let j = i + 1; j < ids.length; j++) {
+            const d = diff(ids[i], ids[j]);
+            if (d.length === ids[i].length - 1) return d;
+        }
+    }
+};
+
 describe('Day 2', () => {
-    test('example', () => {
+    test('example: checksum', () => {
         const input = [
             'abcdef', // 0 0
             'bababc', // 1 1
@@ -41,9 +66,29 @@ describe('Day 2', () => {
         expect(checksum(input)).toEqual(12);
     });
 
-    test('Part 1 - calculate checksum', () => {
+    test('example: find pair', () => {
+        const input = [
+            'abcde',
+            'fghij', // 1
+            'klmno',
+            'pqrst',
+            'fguij', // 2
+            'axcye',
+            'wvxyz',
+        ];
+
+        expect(findPair(input)).toEqual('fgij');
+    });
+
+    test('Part 1: calculate checksum', () => {
         const result = checksum(input);
         // console.log(result);
         expect(result).toEqual(6422);
+    });
+
+    test('Part 2: find pair', () => {
+        const result = findPair(input);
+        // console.log(result);
+        expect(result).toEqual('qcslyvphgkrmdawljuefotxbh');
     });
 });
