@@ -3,11 +3,9 @@
 import * as R from 'ramda';
 import input from './inputs/3.input';
 
-const parseInt = Number.parseInt;
-
 const claimToShape = str => {
     const pattern = /^\#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$/;
-    const match = R.map(parseInt, pattern.exec(str));
+    const match = R.map(Number.parseInt, pattern.exec(str));
     return {
         id: match[1],
         left: match[2],
@@ -18,28 +16,22 @@ const claimToShape = str => {
 };
 
 const gte = R.flip(R.gte);
-const coordinate = (x, y) => `${x},${y}`;
+const range = (start, count) => R.range(start, start + count);
+const points = shape =>
+    R.xprod(
+        range(shape.left, shape.width), //
+        range(shape.top, shape.height)
+    );
 
-const overlap = claims => {
-    return R.pipe(
+const overlap = claims =>
+    R.pipe(
         R.map(claimToShape),
-        R.chain(shape => {
-            // FIXME how to express these loops?
-            const coords = [];
-            for (let y = 0; y < shape.height; y++) {
-                for (let x = 0; x < shape.width; x++) {
-                    const xy = coordinate(shape.left + x, shape.top + y);
-                    coords.push(xy);
-                }
-            }
-            return coords;
-        }),
+        R.chain(shape => points(shape)),
         R.countBy(R.identity),
-        R.values,
         R.filter(gte(2)),
+        R.values,
         R.length
     )(claims);
-};
 
 describe('Day 3', () => {
     test('example: overlap', () => {
